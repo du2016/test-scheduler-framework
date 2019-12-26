@@ -32,6 +32,11 @@ type TestPlugin struct {
 }
 
 func New(rargs *runtime.Unknown, handle framework.FrameworkHandle) (framework.Plugin, error) {
+	args:=Args{}
+	if err := framework.DecodeInto(rargs, args); err != nil {
+		return nil, err
+	}
+	klog.Info(args)
 	return &TestPlugin{
 		handle: handle,
 	}, nil
@@ -49,7 +54,8 @@ func (self *TestPlugin) Less(p1 *v1.Pod, p2 *v1.Pod) bool {
 }
 
 func (self *TestPlugin) PreFilter(ctx context.Context, state *framework.CycleState, p *v1.Pod) *framework.Status {
-	klog.Error("into controller sample")
+	klog.Error("into controller test")
+	state.Write()
 	var dtime int64
 	var err error
 	if v,ok:=p.Annotations["delay"];ok {
@@ -67,7 +73,6 @@ func (self *TestPlugin) PreFilter(ctx context.Context, state *framework.CycleSta
 }
 
 func (self *TestPlugin) AddPod(ctx context.Context, state *framework.CycleState, podToSchedule *v1.Pod, podToAdd *v1.Pod, nodeInfo *schedulernodeinfo.NodeInfo) *framework.Status {
-
 	return nil
 }
 

@@ -11,3 +11,6 @@ plugins:
       - name: "test"
 clientConnection:
   kubeconfig: "/Users/tianpeng.du/.kube/config"
+pluginConfig:
+  - name: "test"
+    args: {"master": "master", "kubeconfig": "kubeconfig"}
