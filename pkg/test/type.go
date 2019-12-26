@@ -29,16 +29,18 @@ type Args struct {
 
 type TestPlugin struct {
 	handle framework.FrameworkHandle
+	Args   *Args
 }
 
 func New(rargs *runtime.Unknown, handle framework.FrameworkHandle) (framework.Plugin, error) {
-	args:=Args{}
+	args := &Args{}
 	if err := framework.DecodeInto(rargs, args); err != nil {
 		return nil, err
 	}
 	klog.Info(args)
 	return &TestPlugin{
 		handle: handle,
+		Args:   args,
 	}, nil
 }
 
@@ -55,19 +57,18 @@ func (self *TestPlugin) Less(p1 *v1.Pod, p2 *v1.Pod) bool {
 
 func (self *TestPlugin) PreFilter(ctx context.Context, state *framework.CycleState, p *v1.Pod) *framework.Status {
 	klog.Error("into controller test")
-	state.Write()
 	var dtime int64
 	var err error
-	if v,ok:=p.Annotations["delay"];ok {
-		if dtime,err=strconv.ParseInt(v,10,64);err!=nil {
+	if v, ok := p.Annotations["delay"]; ok {
+		if dtime, err = strconv.ParseInt(v, 10, 64); err != nil {
 			return nil
 		}
-		if time.Now().Unix()-p.CreationTimestamp.Unix()>=dtime {
-			klog.Infof("scheduler: %s/%s",p.Namespace,p.Name)
+		if time.Now().Unix()-p.CreationTimestamp.Unix() >= dtime {
+			klog.Infof("scheduler: %s/%s", p.Namespace, p.Name)
 			return nil
 		}
-		klog.Infof("not reatch scheduler time: %s/%s",p.Namespace,p.Name)
-		return framework.NewStatus(framework.Skip,"not reatch scheduler time")
+		klog.Infof("not reatch scheduler time: %s/%s", p.Namespace, p.Name)
+		return framework.NewStatus(framework.Skip, "not reatch scheduler time")
 	}
 	return nil
 }

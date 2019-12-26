@@ -11,9 +11,9 @@ import (
 	"github.com/du2016/scheduler-framework-test/pkg/test"
 	"github.com/spf13/cobra"
 	"k8s.io/kubernetes/cmd/kube-scheduler/app"
-	)
+)
 
 func Register() *cobra.Command {
 	return app.NewSchedulerCommand(
-		app.WithPlugin(test.Name,test.New))
+		app.WithPlugin(test.Name, test.New))
 }

@@ -13,9 +13,9 @@ import (
 	"os"
 )
 
-func main()  {
-	cmd:=pkg.Register()
-	if err:=cmd.Execute();err!=nil {
+func main() {
+	cmd := pkg.Register()
+	if err := cmd.Execute(); err != nil {
 		log.Println(err)
 		os.Exit(1)
 	}
