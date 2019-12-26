@@ -1,0 +1,13 @@
+apiVersion: kubescheduler.config.k8s.io/v1alpha1
+kind: KubeSchedulerConfiguration
+schedulerName: "default-scheduler"
+leaderElection:
+  leaderElect: true
+  lockObjectName: scheduler-framework-sample
+  lockObjectNamespace: kube-system
+plugins:
+  preFilter:
+    enabled:
+      - name: "test"
+clientConnection:
+  kubeconfig: "/Users/tianpeng.du/.kube/config"
